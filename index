@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Umbra Altar</title>
+<style>
+  :root{
+    --bg:#101212;
+    --fg:#e2e4e2;
+    --dim:#8a908c;
+    --line:#2a2e2c;
+    --hi:#8fbf9a;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--fg);
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    font-size:15px;
+    line-height:1.6;
+    padding:clamp(24px,6vw,56px) clamp(18px,5vw,32px);
+  }
+  .page{max-width:600px;margin:0 auto}
+
+  h1{
+    font-size:15px;
+    font-weight:500;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    margin:0 0 4px;
+  }
+  .note{color:var(--dim);font-size:13px;margin:0 0 28px}
+
+  .row{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:baseline;
+    gap:8px 16px;
+    padding:12px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .name{flex:1;min-width:140px}
+  .links{display:flex;gap:16px}
+
+  a{color:var(--hi);text-decoration:none;border-bottom:1px solid transparent}
+  a:hover{border-bottom-color:var(--hi)}
+  a:focus-visible{outline:1px solid var(--hi);outline-offset:3px}
+
+  .folder{margin-top:26px;color:var(--dim);font-size:14px}
+  .folder a{color:var(--hi)}
+
+  @media (max-width:480px){
+    .links{width:100%;gap:20px}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <h1>Umbra Altar</h1>
+  <p class="note">Tabs and videos</p>
+
+  <div class="row">
+    <span class="name">Behold</span>
+    <span class="links">
+      <a href="https://www.songsterr.com/a/wsa/umbra-altar-behold-tab-s5302013" target="_blank" rel="noopener">tab</a>
+      <a href="https://youtu.be/MBqX7Ipw_Uk" target="_blank" rel="noopener">video</a>
+    </span>
+  </div>
+
+  <div class="row">
+    <span class="name">Equilibrium</span>
+    <span class="links">
+      <a href="https://www.songsterr.com/a/wsa/umbra-altar-equilibrium-tab-s5481633" target="_blank" rel="noopener">tab</a>
+      <a href="https://youtu.be/5qWTtqeHGhU" target="_blank" rel="noopener">video</a>
+    </span>
+  </div>
+
+  <div class="row">
+    <span class="name">Sleep</span>
+    <span class="links">
+      <a href="https://www.songsterr.com/a/wsa/umbra-altar-sleep-tab-s5290381" target="_blank" rel="noopener">tab</a>
+      <a href="https://youtu.be/3ORtx_tvHoU" target="_blank" rel="noopener">video</a>
+    </span>
+  </div>
+
+  <div class="row">
+    <span class="name">The Flesh</span>
+    <span class="links">
+      <a href="https://drive.google.com/file/d/16zZfJgfIhrUw418oLuTHtvIvPbQadGky" target="_blank" rel="noopener">tab</a>
+      <a href="https://youtu.be/bQFT0CRSRjk" target="_blank" rel="noopener">video</a>
+    </span>
+  </div>
+
+  <p class="folder">
+    New songs, stems and audio:
+    <a href="https://drive.google.com/drive/folders/10g41Kd2JRCETCPObFYoJiduK-H_9hCEd" target="_blank" rel="noopener">Drive folder</a>
+  </p>
+
+</div>
+</body>
+</html>
