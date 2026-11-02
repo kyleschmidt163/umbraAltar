@@ -59,6 +59,56 @@
   .folder{margin-top:26px;color:var(--dim);font-size:14px}
   .folder a{color:var(--hi)}
 
+  /* Player */
+  .player{padding:14px 0 4px;border-bottom:1px solid var(--line)}
+  .now{margin:0 0 12px;min-height:1.6em}
+  .now.err{color:#d98c8c;font-size:13px}
+  .controls{display:flex;align-items:center;gap:10px}
+  .ctl{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:38px;height:38px;padding:0;
+    background:transparent;color:var(--fg);
+    border:1px solid var(--line);border-radius:2px;
+    cursor:pointer;
+  }
+  .ctl.main{width:46px;height:46px;border-color:var(--hi);color:var(--hi)}
+  .ctl:hover{border-color:var(--dim)}
+  .ctl.main:hover{border-color:var(--hi);background:rgba(143,191,154,.08)}
+  .ctl svg{width:16px;height:16px;fill:currentColor}
+  .ctl:focus-visible,.trk:focus-visible,.seek:focus-visible{outline:1px solid var(--hi);outline-offset:3px}
+  .bar{
+    display:flex;align-items:center;gap:12px;
+    margin:14px 0 6px;
+    color:var(--dim);font-size:13px;font-variant-numeric:tabular-nums;
+  }
+  .seek{
+    flex:1;min-width:0;height:24px;margin:0;
+    -webkit-appearance:none;appearance:none;background:transparent;cursor:pointer;
+    --pct:0%;
+  }
+  .seek::-webkit-slider-runnable-track{
+    height:3px;border-radius:0;
+    background:linear-gradient(to right,var(--hi) var(--pct),var(--line) var(--pct));
+  }
+  .seek::-webkit-slider-thumb{
+    -webkit-appearance:none;width:12px;height:12px;margin-top:-4.5px;
+    border-radius:50%;background:var(--fg);border:0;
+  }
+  .seek::-moz-range-track{height:3px;background:var(--line)}
+  .seek::-moz-range-progress{height:3px;background:var(--hi)}
+  .seek::-moz-range-thumb{width:12px;height:12px;border-radius:50%;background:var(--fg);border:0}
+  .tracks{list-style:none;margin:8px 0 0;padding:0}
+  .trk{
+    display:flex;width:100%;gap:14px;
+    padding:10px 0;
+    background:transparent;color:var(--fg);
+    border:0;border-top:1px solid var(--line);
+    font:inherit;text-align:left;cursor:pointer;
+  }
+  .trk .n{color:var(--dim);min-width:2ch;font-variant-numeric:tabular-nums}
+  .trk:hover .t{color:var(--hi)}
+  .trk[aria-current="true"] .t,.trk[aria-current="true"] .n{color:var(--hi)}
+
   @media (max-width:480px){
     .links{width:100%;gap:20px}
   }
@@ -130,6 +180,24 @@
     </span>
   </div>
 
+  <h2>Listen</h2>
+
+  <div class="player" id="player">
+    <p class="now" id="now">Pick a track</p>
+    <div class="controls">
+      <button class="ctl" id="prev" type="button" aria-label="Previous track"><svg viewBox="0 0 24 24"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg></button>
+      <button class="ctl main" id="play" type="button" aria-label="Play"><svg viewBox="0 0 24 24" id="play-icon"><path d="M7 4v16l13-8z"/></svg></button>
+      <button class="ctl" id="next" type="button" aria-label="Next track"><svg viewBox="0 0 24 24"><path d="M16 5h2v14h-2zM4 5v14l11-7z"/></svg></button>
+    </div>
+    <div class="bar">
+      <span id="cur">0:00</span>
+      <input class="seek" id="seek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+      <span id="dur">0:00</span>
+    </div>
+    <ol class="tracks" id="tracks"></ol>
+    <audio id="audio" preload="metadata"></audio>
+  </div>
+
   <h2>Click tracks</h2>
 
   <div class="row">
@@ -152,5 +220,91 @@
   </p>
 
 </div>
+
+<script>
+(function(){
+  /* Track list. "file" must match the filename in the audio folder exactly,
+     including capitals and spaces. Add more lines to add more tracks. */
+  var tracks = [
+    { title: 'Summoning', file: 'summoning .wav' }
+  ];
+  var band = 'Umbra Altar';
+
+  var a = document.getElementById('audio'),
+      playBtn = document.getElementById('play'),
+      icon = document.getElementById('play-icon'),
+      seek = document.getElementById('seek'),
+      cur = document.getElementById('cur'),
+      dur = document.getElementById('dur'),
+      now = document.getElementById('now'),
+      list = document.getElementById('tracks'),
+      idx = -1, dragging = false;
+  var PLAY = '<path d="M7 4v16l13-8z"/>',
+      PAUSE = '<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>';
+
+  function fmt(s){ if(!isFinite(s)) return '0:00'; s=Math.floor(s); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
+  function setPct(v){ seek.style.setProperty('--pct',(v/10)+'%'); }
+
+  tracks.forEach(function(t,i){
+    var li=document.createElement('li'), b=document.createElement('button');
+    b.type='button'; b.className='trk';
+    b.innerHTML='<span class="n">'+(i+1)+'</span><span class="t"></span>';
+    b.querySelector('.t').textContent=t.title;
+    b.addEventListener('click',function(){ if(i===idx){ toggle(); } else { load(i); a.play(); } });
+    li.appendChild(b); list.appendChild(li);
+  });
+  var btns=list.querySelectorAll('.trk');
+
+  function load(i){
+    idx=(i+tracks.length)%tracks.length;
+    a.src='audio/'+encodeURIComponent(tracks[idx].file);
+    now.textContent=tracks[idx].title;
+    now.classList.remove('err');
+    btns.forEach(function(b,j){ b.setAttribute('aria-current', j===idx ? 'true' : 'false'); });
+    seek.value=0; setPct(0); cur.textContent='0:00'; dur.textContent='0:00';
+    if('mediaSession' in navigator){
+      navigator.mediaSession.metadata=new MediaMetadata({ title: tracks[idx].title, artist: band });
+    }
+  }
+  function toggle(){ if(idx<0){ load(0); } if(a.paused){ a.play(); } else { a.pause(); } }
+
+  playBtn.addEventListener('click',toggle);
+  document.getElementById('prev').addEventListener('click',function(){
+    if(a.currentTime>3){ a.currentTime=0; } else { load(idx<0?0:idx-1); a.play(); }
+  });
+  document.getElementById('next').addEventListener('click',function(){ load(idx+1); a.play(); });
+
+  a.addEventListener('play',function(){ icon.innerHTML=PAUSE; playBtn.setAttribute('aria-label','Pause'); });
+  a.addEventListener('pause',function(){ icon.innerHTML=PLAY; playBtn.setAttribute('aria-label','Play'); });
+  a.addEventListener('loadedmetadata',function(){ dur.textContent=fmt(a.duration); });
+  a.addEventListener('timeupdate',function(){
+    if(dragging||!a.duration) return;
+    var v=Math.round(a.currentTime/a.duration*1000);
+    seek.value=v; setPct(v);
+    cur.textContent=fmt(a.currentTime);
+  });
+  a.addEventListener('ended',function(){ if(idx<tracks.length-1){ load(idx+1); a.play(); } });
+  a.addEventListener('error',function(){
+    now.textContent='Can’t load audio/'+tracks[idx].file+'. Check the filename matches exactly.';
+    now.classList.add('err');
+  });
+
+  seek.addEventListener('input',function(){
+    dragging=true; setPct(seek.value);
+    if(a.duration) cur.textContent=fmt(seek.value/1000*a.duration);
+  });
+  seek.addEventListener('change',function(){
+    if(a.duration) a.currentTime=seek.value/1000*a.duration;
+    dragging=false;
+  });
+
+  if('mediaSession' in navigator){
+    navigator.mediaSession.setActionHandler('play',function(){ a.play(); });
+    navigator.mediaSession.setActionHandler('pause',function(){ a.pause(); });
+    navigator.mediaSession.setActionHandler('previoustrack',function(){ load(idx-1); a.play(); });
+    navigator.mediaSession.setActionHandler('nexttrack',function(){ load(idx+1); a.play(); });
+  }
+})();
+</script>
 </body>
 </html>
