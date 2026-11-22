@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dinosaur Man</title>
+<meta name="theme-color" content="#2a0a1e">
+<style>
+  :root{
+    --ink:#fff4d6;          /* main text, warm cream */
+    --ink-dim:#f3c9a0;      /* secondary text */
+    --acid-1:#ff3d7f;       /* hot pink */
+    --acid-2:#ff9f1c;       /* tangerine */
+    --acid-3:#ffe74c;       /* acid yellow */
+    --acid-4:#c2f970;       /* lime */
+    --deep-1:#2a0a1e;       /* background stops */
+    --deep-2:#5b1036;
+    --deep-3:#7a2a0c;
+    --deep-4:#3b0f4a;
+    --rule:rgba(255,231,76,.35);
+    --sans:"Trebuchet MS","Avenir Next",Avenir,"Segoe UI",Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{background:var(--deep-1)}
+  body{
+    margin:0;
+    min-height:100vh;
+    background:linear-gradient(135deg,var(--deep-1),var(--deep-2),var(--deep-3),var(--deep-4),var(--deep-1));
+    background-size:400% 400%;
+    animation:drift 24s ease-in-out infinite;
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:16px;
+    line-height:1.5;
+    padding:40px 16px 72px;
+    -webkit-font-smoothing:antialiased;
+  }
+  @keyframes drift{
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+  }
+  .page{max-width:620px;margin:0 auto}
+
+  /* ---------- Heading ---------- */
+  h1{
+    margin:0;
+    font-size:clamp(44px,13vw,76px);
+    font-weight:900;
+    line-height:.95;
+    letter-spacing:-.02em;
+    text-transform:uppercase;
+    color:var(--acid-3); /* fallback if background-clip text is unsupported */
+    background:linear-gradient(90deg,var(--acid-1),var(--acid-2),var(--acid-3),var(--acid-4),var(--acid-2),var(--acid-1));
+    background-size:300% 100%;
+    -webkit-background-clip:text;
+            background-clip:text;
+    -webkit-text-fill-color:transparent;
+    animation:shimmer 9s linear infinite;
+  }
+  @keyframes shimmer{from{background-position:0% 50%}to{background-position:300% 50%}}
+
+  .note{
+    margin:12px 0 32px;
+    color:var(--ink-dim);
+    font-size:15px;
+    letter-spacing:.02em;
+  }
+
+  /* ---------- Rows ---------- */
+  .row{
+    display:flex;align-items:center;flex-wrap:wrap;gap:8px 16px;
+    padding:16px 0;
+    border-bottom:2px dashed var(--rule);
+  }
+  .row:first-of-type{border-top:2px dashed var(--rule)}
+  .name{
+    flex:1 1 100%;min-width:0;
+    font-size:21px;font-weight:700;line-height:1.2;
+  }
+  .links{display:flex;gap:8px;flex-shrink:0}
+  .links a{
+    display:inline-block;
+    padding:6px 14px;
+    font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    text-decoration:none;
+    color:var(--acid-3);
+    border:2px solid currentColor;
+    border-radius:999px;
+    transition:background-color .15s,color .15s;
+  }
+  .row:nth-of-type(4n+2) .links a{color:var(--acid-1)}
+  .row:nth-of-type(4n+3) .links a{color:var(--acid-4)}
+  .row:nth-of-type(4n+4) .links a{color:var(--acid-2)}
+  .links a:hover{background:currentColor}
+  .links a:hover span{color:var(--deep-1)}
+  a:focus-visible{outline:2px dashed var(--ink);outline-offset:3px}
+
+  .back{
+    margin:40px 0 0;
+    font-size:14px;letter-spacing:.06em;
+  }
+  .back a{color:var(--ink-dim)}
+  .back a:hover{color:var(--ink)}
+
+  @media (min-width:520px){
+    body{padding-top:56px}
+    .name{flex-basis:auto;flex:1}
+  }
+  @media (prefers-reduced-motion:reduce){
+    body,h1{animation:none}
+    .links a{transition:none}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <h1>Dinosaur Man</h1>
+  <p class="note">Tabs for now. Videos coming later.</p>
+
+  <div class="row">
+    <span class="name">I Shave My Balls</span>
+    <span class="links">
+      <a href="https://www.songsterr.com/a/wsa/whatever-i-shave-my-balls-with-a-razor-updated-bass-tab-s6394258" target="_blank" rel="noopener"><span>bass tab</span></a>
+    </span>
+  </div>
+
+  <div class="row">
+    <span class="name">Laundry Chair</span>
+    <span class="links">
+      <a href="https://www.songsterr.com/a/wsa/whatever-laundry-chair-tab-s6394250t0" target="_blank" rel="noopener"><span>tab</span></a>
+    </span>
+  </div>
+
+  <div class="row">
+    <span class="name">Wolf in Wolf’s Clothing</span>
+    <span class="links">
+      <a href="https://www.songsterr.com/a/wsa/whatever-wolf-in-wolves-clothing-tab-s6204673t2" target="_blank" rel="noopener"><span>tab</span></a>
+    </span>
+  </div>
+
+  <div class="row">
+    <span class="name">IDK</span>
+    <span class="links">
+      <a href="https://www.songsterr.com/a/wsa/whatever-idk-what-to-say-jam-tab-s6204672t2" target="_blank" rel="noopener"><span>tab</span></a>
+    </span>
+  </div>
+
+  <div class="row">
+    <span class="name">Future Snails</span>
+    <span class="links">
+      <a href="https://www.songsterr.com/a/wsa/whatever-future-snails-2-tab-s6204380" target="_blank" rel="noopener"><span>tab</span></a>
+    </span>
+  </div>
+
+  <div class="row">
+    <span class="name">Emoticon</span>
+    <span class="links">
+      <a href="https://www.songsterr.com/a/wsa/whatever-emoticon-jam-bass-tab-s6204667" target="_blank" rel="noopener"><span>bass tab</span></a>
+    </span>
+  </div>
+
+  <p class="back"><a href="index.html">&larr; Umbra Altar</a></p>
+
+</div>
+</body>
+</html>
